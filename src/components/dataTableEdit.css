@@ -1,0 +1,61 @@
+#facture {
+    text-align: center;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    width: 98%;
+    font-size:17px;
+    margin: 0 auto 0 auto;
+    
+  }
+  
+  #facture td, #facture th {
+    border: 1px solid #ddd;
+    
+  }
+  
+  
+  
+  
+  
+  #facture th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #4e0202;
+    color: white;
+  }
+
+  #facture #total  {
+    text-align:left;
+    background-color: #926262;
+    padding-left: 3%;
+    font-weight: 900;
+ }
+ #facture #total-value  {
+    background-color: #926262;
+    color:white;
+    font-weight: 900;
+ }
+ #facture tbody:nth-child(2){
+     width:50%;
+ }
+ td input{
+     width: 100%;
+     height: 30px;
+     text-align: right;
+     border:none;
+     font-size:17px;
+ }
+ td input:focus{
+    outline: none;
+}
+ td select{
+    width: 100%;
+    height: 30px;
+    border:none;
+    font-size:17px;
+}
+td select:focus{
+    outline: none;
+}
