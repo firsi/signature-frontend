@@ -1,16 +1,11 @@
-import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import {Link, withRouter} from 'react-router-dom';
 import {logout} from '../redux/actions/userActions';
 import logoWhite from '../images/logoWhite.svg';
 //Material UI
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import MenuTreeView from './MenuTreeView';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
-import { useTheme } from '@material-ui/styles';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import {  makeStyles } from '@material-ui/core/styles';
 import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 
 //Redux 
@@ -22,21 +17,33 @@ import { withStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        flexGrow: 1,
         
+        backgroundColor:theme.palette.primary.main,
+        height:'100vh',
+        //textAlign:'center',
       },
+
       logoWhite: {
-        height: '70px',
+        width: '170px',
+        marginBottom:"10%",
+        marginLeft:'10%'
+       
       },
       title: {
-        flexGrow: 1,
+        
         marginLeft: '20vw'
       },
       leftIcon: {
         marginRight: theme.spacing(1),
       },
       buttonContained: {
-        marginLeft: theme.spacing(3),
+        marginLeft: theme.spacing(1),
+        position: 'absolute',
+        bottom: '5%',
+        color: "#ffffff82",
+        fontWeight:'500',
+        fontSize: '12px'
+
       }
 }));
 
@@ -44,44 +51,43 @@ const useStyles = makeStyles(theme => ({
 
  function Navbar(props) {
   const classes = useStyles();
-
+/*<Button color='secondary' component={Link} to='/'>Factures</Button>
+                            <Button color='secondary' component={Link} to='/'>Proforma</Button>
+                            <Button color='secondary' component={Link} to='/'>Bordereau</Button>
+                            <Button color='secondary' component={Link} to='/signup'>Réglages</Button>*/
         
         let {user:{authenticated}} = props;
         return (
-            (authenticated) ? <div className = {classes.root}>
-                <AppBar color='primary'>
-                    <Toolbar >
-                    <Typography variant="h6" className={classes.title} edge="start">
-                    <img src={logoWhite} className={classes.logoWhite} alt='Signature logoWhite' />
-                    </Typography>
+        authenticated ?  <div className = {classes.root}>
+                  
+                     <img src={logoWhite} className={classes.logoWhite} alt='Signature logoWhite' />
                     
-                            <Button color='secondary' component={Link} to='/'>Acceuil</Button>
-                            <Button color='secondary' component={Link} to='/'>Proforma</Button>
-                            <Button color='secondary' component={Link} to='/'>Bordereau</Button>
-                            <Button color='secondary' component={Link} to='/signup'>Réglages</Button>
-                            <Button className={classes.buttonContained} variant='contained' color='secondary' onClick={props.logout} component={Link} to='/login'>
+                      <MenuTreeView />
+                            
+                            <Button className={classes.buttonContained} variant='link' color='secondary' onClick={props.logout} component={Link} to='/login'>
                               <SupervisedUserCircle className={classes.leftIcon} />
                               Déconnexion</Button>
-                    </Toolbar>
-                </AppBar>
-            </div>
-            : <div></div>
+                   
+            </div> : <Fragment></Fragment>
+            
         )
     }
 
 
 Navbar.propTypes = {
     user: PropTypes.object.isRequired,
-    classes: PropTypes.object.isRequired,
+    
     logoutUser: PropTypes.func.isRequired
 }
 
 const mapPropsToState = (state) => ({
-    user: state.user
+    user: state.user,
+    ui: state.ui,
+    data: state.data
 })
 
 const mapActionToProps = {
   logout
 }
 
-export default connect(mapPropsToState, mapActionToProps)(Navbar);
+export default withRouter(connect(mapPropsToState, mapActionToProps)(Navbar));

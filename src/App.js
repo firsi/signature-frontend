@@ -7,6 +7,7 @@ import Login from './pages/login';
 import Navbar from './components/Navbar';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
+import Grid from '@material-ui/core/Grid';
 import themeFile from './util/theme';
 import jwtDecode from 'jwt-decode';
 import AuthRoute from './util/AuthRoute';
@@ -17,6 +18,8 @@ import {logout} from './redux/actions/userActions';
 import store from './redux/store';
 import axios from 'axios';
 import { getAllFactures } from './redux/actions/dataActions';
+import { AddProduct } from './components/AddProduct';
+import { AddCompany } from './components/AddCompany';
 
 const theme = createMuiTheme(themeFile);
 
@@ -45,16 +48,22 @@ function App() {
       <MuiThemeProvider theme={theme}>
       
       <Router>
-        <Navbar />
-        <div className="container">
-          <Switch>
-            
-            <ProtectedRoute exact path='/' component={Home} />
-            <ProtectedRoute exact path='/signup' component={Signup}  />
-
-            <AuthRoute exact path='/login' component={Login}   />
-          </Switch>
-        </div>
+      <Switch>
+        <Grid container >
+            <Grid item  sm={3} md={2}>
+                <Navbar />
+            </Grid>
+              
+              <Grid item sm={9} md={10} styles className='content'>        
+                    <ProtectedRoute exact path='/' component={Home} />
+                    <ProtectedRoute  path='/products' component={AddProduct} />
+                    <ProtectedRoute  path='/companies' component={AddCompany}  />
+                    <ProtectedRoute exact path='/signup' component={Signup}  />   
+              </Grid>      
+                  <AuthRoute exact path='/login' component={Login}   />  
+              
+          </Grid> 
+        </Switch>
       </Router>
    
     </MuiThemeProvider>

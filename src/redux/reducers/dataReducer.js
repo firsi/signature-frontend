@@ -1,4 +1,4 @@
-import {SET_FACTURES, CREATE_PRODUCT, CREATE_COMPANY, CLEAR_DATA, SET_COMPANIES,SET_SELECTED_COMPANY, SET_PRODUCTS, SEND_FACTURE} from '../types';
+import {SET_SINGLE_FACTURE, SET_FACTURES, CREATE_PRODUCT, CREATE_COMPANY, CLEAR_DATA, SET_COMPANIES,SET_SELECTED_COMPANY, SET_PRODUCTS, SEND_FACTURE} from '../types';
 
 const initialState = {
    
@@ -6,7 +6,7 @@ const initialState = {
     message:'',
     companies:[],
     products: [],
-   
+    facture:{},
 }
 
 export default function (state = initialState, action) {
@@ -17,6 +17,13 @@ export default function (state = initialState, action) {
                 ...state,
                 factures: action.payload
             }
+
+        case SET_SINGLE_FACTURE :
+            return {  
+                    ...state,
+                    facture: action.payload
+                }
+
         case SEND_FACTURE :
             return {  
                     ...state,
@@ -51,8 +58,10 @@ export default function (state = initialState, action) {
             case CREATE_COMPANY : 
             return {
                 ...state,
-                company: action.payload
+                message: action.payload
             }
+
+
         case  CLEAR_DATA: 
             return {
                 ...state,

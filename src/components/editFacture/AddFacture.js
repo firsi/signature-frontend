@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
 import ReactDataGrid from "react-data-grid";
-import {getAllProducts} from '../redux/actions/dataActions';
-import {getAllCompanies} from '../redux/actions/dataActions';
+import {getAllProducts} from '../../redux/actions/dataActions';
+import {getAllCompanies} from '../../redux/actions/dataActions';
 import PropTypes from 'prop-types';
 
 //Material UI
 import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Feedback from './Feedback';
+import Feedback from '../Feedback';
 import DataTableEdit from './DataTableEdit';
 
 const styles = {
     paper: {
         paddingTop:'20px',
-        paddingBottom: '20px',
+        paddingBottom: '80px',
     },
     title: {
         fontWeight: '700',

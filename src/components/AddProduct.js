@@ -16,6 +16,7 @@ import Feedback from './Feedback';
 //Redux
 import {connect} from 'react-redux';
 import {createProduct} from '../redux/actions/dataActions'; 
+import { withRouter } from 'react-router-dom';
 
 
 
@@ -158,8 +159,6 @@ export class AddProduct extends Component {
 
 AddProduct.propTypes = {
     classes : PropTypes.object.isRequired,
-    
-   
     data : PropTypes.object.isRequired,
     ui : PropTypes.object.isRequired
 }
@@ -179,5 +178,5 @@ const mapStateToProps = (state) => ({
     return bindActionCreators({ createProduct, clearErrors,clearData }, dispatch)
   }
 
-export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddProduct));
+export default withRouter(connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddProduct)));
 

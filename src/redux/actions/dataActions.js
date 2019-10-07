@@ -1,3 +1,4 @@
+import {saveAs} from 'file-saver';
 import {SET_FACTURES, 
         LOADING_UI, 
         CLEAR_ERRORS, 
@@ -7,9 +8,12 @@ import {SET_FACTURES,
         SET_COMPANIES, 
         SET_PRODUCTS,
         SET_SELECTED_COMPANY,
-        SEND_FACTURE}  from '../types';
+        SEND_FACTURE,
+        SET_SINGLE_FACTURE,
+    }  from '../types';
 
         import axios from 'axios';
+import { resolve } from 'any-promise';
  
 export const getAllFactures = () => (dispatch) => {
 
@@ -25,6 +29,37 @@ export const getAllFactures = () => (dispatch) => {
     .catch(error => console.log(error))
 
 };
+
+export const getFacture = (id) => (dispatch) => {
+    //dispatch({type: LOADING_UI});
+
+    let promise = new Promise((resolve, reject) => {
+
+        axios.get(`/factures/${id}`)
+    .then(response => {
+        dispatch({type: SET_SINGLE_FACTURE,
+                  payload: response.data
+        })
+        dispatch({type: CLEAR_ERRORS});
+    
+        resolve(response.data);    
+    })
+    
+    
+    
+    .catch(error =>{
+        dispatch({type: SET_ERRORS,
+                 payload:  error.response.data
+         });
+         reject(false);
+    } 
+       
+        )        
+
+    });
+    return promise;
+
+} 
 
 export const postFacture = (factureData) => (dispatch) => {
 
@@ -125,3 +160,26 @@ export const createCompany = (companyData) => (dispatch) => {
         )
 
 };
+
+export const generatePdf = (factureData) => (dispatch) => {
+    dispatch({type: LOADING_UI});
+
+    axios.post('/createPdf', factureData, {responseType: 'arraybuffer'})
+    .then(response => {
+
+       
+        const pdfBlob = new Blob([response.data], {type: 'application/pdf'});
+        dispatch({type: CLEAR_ERRORS});
+
+        saveAs(pdfBlob, 'facture.pdf');
+       
+    })
+    .catch(error =>{
+        dispatch({type: SET_ERRORS,
+                 payload:  error.response.data
+         });
+    } 
+        
+        )
+    
+}

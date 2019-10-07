@@ -17,6 +17,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 //Redux
 import {connect} from 'react-redux';
 import {createCompany} from '../redux/actions/dataActions'; 
+import {withRouter} from 'react-router-dom';
 
 
 
@@ -65,8 +66,8 @@ const styles = {
 };
 
 export class AddCompany extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
             company: '',
@@ -140,7 +141,7 @@ export class AddCompany extends Component {
         const {classes, ui : {loading} } = this.props;
         const {errors} = this.state;
         
-
+        
         return (
             <Grid container className={classes.form}  >
                     <Snackbar
@@ -160,8 +161,8 @@ export class AddCompany extends Component {
                 <Grid item sm={12}>
                     
                     
-                    <Typography className = {classes.title} variant='h3' 
-                     >Ajouter Une Compagnie</Typography >
+                    {this.props.isCalledFromAnotherPage ? '' : <Typography className = {classes.title} variant='h3' 
+                     >Ajouter Une Compagnie</Typography >}
                     <form noValidate onSubmit={this.handleSubmit} >
                         <TextField   id='company' type='text' name='company' label ='Compagnie' 
                         value={this.state.company} onChange={this.handleChange} 
@@ -180,11 +181,12 @@ export class AddCompany extends Component {
                         className={`${classes.textField} ${classes.Address}`}  />
                         
                         
-                        <Button type='submit' variant='contained' color='primary' 
+                       {this.props.isCalledFromAnotherPage ? '' : <Button type='submit' variant='contained' color='primary' 
                          className={classes.button} disabled={loading} >
                            <SaveOutlined className={classes.leftIcon} />
                             Enregistrer {loading && <CircularProgress size={30} className={classes.progress} color='secondary' />}
-                        </Button><br />
+                        </Button>}
+                        <br />
                         
   
                         
@@ -221,5 +223,5 @@ const mapStateToProps = (state) => ({
     return bindActionCreators({ createCompany, clearErrors, clearData }, dispatch)
   }
 
-export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddCompany));
+export default withRouter(connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddCompany)));
 

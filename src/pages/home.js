@@ -5,33 +5,28 @@ import {Link} from 'react-router-dom';
 import VerticalTab from '../components/verticalTab';
 import AddProduct from '../components/AddProduct';
 import AddCompany from '../components/AddCompany';
-import AddFacture from '../components/AddFacture';
+import AddFacture from '../components/editFacture/AddFacture';
 
 
 //Material UI
 import withStyles from '@material-ui/core/styles/withStyles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import PrintIcon from '@material-ui/icons/Print';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import FactureTable from '../components/FactureTable';
-import {makeStyles} from '@material-ui/core/styles'
+import FactureTable from '../components/Factures/FactureTable';
+
 
 //redux
 import {getAllFactures} from '../redux/actions/dataActions';
-import axios from 'axios';
-import { flexbox } from '@material-ui/system';
+
 
 //import CommentIcon from '@material-ui/core/Icon/';
 const styles = {
     root: {
-       height: '60px',
-       borderBottom: `1px solid rgba(0, 0, 0, 0.12)`,
+      height: '60px',
+      borderBottom: `1px solid rgba(0, 0, 0, 0.12)`,
+           },
+    vertical: {
+        
     },
     primary: {
         body1 :{
@@ -53,22 +48,23 @@ export class Home extends Component {
         let elementToShowArr = [];
         let {classes} = this.props;
         let {data:{factures}, ui: {loading}} = this.props;
-        let RecentFacturesMarkup = (!loading )  ? <FactureTable />
-        
-        : <CircularProgress size={100} className={classes.progress} color='secondary' />;
+        let RecentFacturesMarkup = !loading ? <FactureTable /> : <CircularProgress size={100} className={classes.progress} color='secondary' /> 
 
-       elementToShowArr.push(RecentFacturesMarkup);
+      /* elementToShowArr.push(RecentFacturesMarkup);
        elementToShowArr.push(<AddProduct />);
        elementToShowArr.push(<AddCompany />);
        elementToShowArr.push(<AddFacture />);
        
-        return (
-               <Grid container>
-                   <Grid item sm={12}>
-                        <VerticalTab element={elementToShowArr}/>
-                   </Grid>
-               </Grid>
-        )
+       */
+      // <VerticalTab   element={elementToShowArr}/>
+       return RecentFacturesMarkup;
+       
+               
+                   
+        
+                   
+               
+        
     }
 }
 

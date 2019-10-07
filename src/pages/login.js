@@ -18,9 +18,13 @@ import {loginUser} from '../redux/actions/userActions';
 const styles = {
     form: {
         textAlign: 'center',
-        marginTop: '-70px'
+        height: '100vh',
+        
     },
-
+    formContainer: {
+        paddingLeft: '3%',
+        paddingRight: '3%',
+    },
     logo:{
       margin: '0px auto 0 auto',
       width: '300px'
@@ -48,6 +52,12 @@ const styles = {
     progress :{
     position: 'absolute'
     
+    },
+    image: {
+        backgroundImage: 'url(/loginBackground.jpg)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
     }
   
 };
@@ -92,29 +102,29 @@ class Login extends Component {
         const {errors} = this.state;
         return (
             <Grid container className={classes.form}  >
-                <Grid item sm/>
-                <Grid item sm={4}>
+                <Grid item sm={4} md={7} xs={false} className={classes.image}/>
+                <Grid item sm={8} md={5} xs={12} className={classes.formContainer}>
                     <img src={logo} className={classes.logo} alt='Signature logo' />
-                    <Typography className = {classes.title} variant='h3' color='secondary' >Connectez vous pour commencer</Typography >
+                    <Typography className = {classes.title} variant='h5' >Connectez vous pour commencer</Typography >
                     <form noValidate onSubmit={this.handleSubmit} >
                         <TextField variant='outlined' id='email' type='email' name='email' label ='Email' 
                         value={this.state.email} onChange={this.handleChange} 
                         helperText={errors.email}
                         error = {errors.email ? true : false}
-                        className={classes.textField} fullWidth />
+                        className={classes.textField} fullWidth margin='normal' />
 
                         <TextField variant='outlined' id='password' type='password' name='password' label ='Mot de passe' placeholder='Mot de passe'
                         value={this.state.password} onChange={this.handleChange} 
                         helperText={errors.password}
                         error = {errors.password ? true : false}
-                        className={classes.textField} fullWidth />
+                        className={classes.textField} margin='normal' fullWidth />
                         {(errors.general) &&
                             <Typography variant='body2' className={classes.customError}>
                                 {errors.general}
                             </Typography>
                         }
                         
-                        <Button type='submit' variant='contained' color='primary' 
+                        <Button type='submit' variant='contained' color='secondary' 
                         fullWidth className={classes.button} disabled={loading} >
                             Connexion {loading && <CircularProgress size={30} className={classes.progress} color='secondary' />}
                         </Button><br />
@@ -123,7 +133,7 @@ class Login extends Component {
                     </form>
                    
                 </Grid>
-                <Grid item sm/>
+               
 
             </Grid>
         )

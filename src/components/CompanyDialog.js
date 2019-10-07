@@ -1,5 +1,6 @@
-import React from 'react';
+/*import React from 'react';
 import Button from '@material-ui/core/Button';
+
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -8,20 +9,29 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { AddCompany } from './AddCompany';
 
-export default function CompanyDialog(props) {
-  const [open, setOpen] = React.useState(false);
-
-  function handleClickOpen() {
-    setOpen(true);
+class CompanyDialog extends React.Component {
+  
+  constructor(props){
+    super(props);
+    this.state = {
+      open : false
+    }
+  }
+  
+   handleClickOpen = () => {
+    this.setState({
+      open: this.props.open
+    })
   }
 
-  function handleClose() {
+  handleClose = () => {
     setOpen(false);
   }
 
-  return (
+  render() {
+    return (
     
-      <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Ajouter une compagnie</DialogTitle>
         <DialogContent>
             <AddCompany />
@@ -39,3 +49,4 @@ export default function CompanyDialog(props) {
    
   );
 }
+}*/

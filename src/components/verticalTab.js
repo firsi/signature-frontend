@@ -45,8 +45,9 @@ const useStyles = makeStyles(theme => ({
     flex:1,
     height: '100vh',
     position:'fixed',
-    width:'100%'
-    
+    width:'100%',
+    overflow: 'auto',
+     
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,

@@ -24,7 +24,17 @@ export default {
         },
       },
       
-  
+      typography: {
+        fontWeightRegular:{
+          fontWeight: '400'
+        },
+        fontWeightMedium:{
+          fontWeight: '700'
+        },
+        fontWeightDense:{
+          fontWeight: '900'
+        }
+      }
      
     
   };
