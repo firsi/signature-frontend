@@ -14,9 +14,10 @@ import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import Divider from '@material-ui/core/Divider';
-import {NavLink, Link} from 'react-router-dom';
+import { Link} from '@reach/router';
 import LinkMUI from '@material-ui/core/Link';
 import {withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const useTreeItemStyles = makeStyles(theme => ({
   root: {
@@ -72,6 +73,20 @@ const useTreeItemStyles = makeStyles(theme => ({
       color: theme.palette.secondary.main,
   }
 }));
+const NavLink = props => (
+  <Link
+    {...props}
+    getProps={({ isCurrent }) => {
+      // the object returned here is passed to the
+      // anchor element's props
+      return {
+        style: {
+          color: isCurrent ? "#b71c1c" : "#fff"
+        }
+      };
+    }}
+  />
+);
 
 function StyledTreeItem(props) {
   const classes = useTreeItemStyles();
@@ -153,7 +168,7 @@ function MenuTreeView() {
       <Divider variant="middle" className={classes.divider}/>
 
       <StyledTreeItem className={classes.bottomMargin} nodeId="4" labelText="Produit" labelIcon={ShoppingCart} >
-      <StyledTreeItem component={Link} to='/products' nodeId="7" labelText="Ajouter un produit" labelIcon={PlaylistAddIcon}/>
+      <StyledTreeItem component={NavLink} to='/products' nodeId="7" labelText="Ajouter un produit" labelIcon={PlaylistAddIcon}/>
 
       </StyledTreeItem>
       <StyledTreeItem className={classes.bottomMargin} nodeId="5" labelText="Compagnies" labelIcon={Business} >
@@ -165,4 +180,9 @@ function MenuTreeView() {
   );
 }
 
-export default MenuTreeView;
+
+const mapStateToProps = (state) => ({
+  ui: state.ui,
+  data: state.data
+})
+export default connect(mapStateToProps)(MenuTreeView);

@@ -30,10 +30,6 @@ render (){
   let {classes} = this.props
   return (
     <Paper className={classes.paper}>
-        <Typography className = {classes.title} variant='h6' 
-                     >Produire une facture</Typography >
-
-       
         <DataTableEdit />
     <Feedback />
     </Paper>

@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router,  Switch } from 'react-router-dom';
 import Home from './pages/home';
+import Product  from './pages/Product';
+import  Company  from './pages/Company';
 import Signup from './pages/signup';
 import Login from './pages/login';
 import Navbar from './components/Navbar';
@@ -11,15 +12,14 @@ import Grid from '@material-ui/core/Grid';
 import themeFile from './util/theme';
 import jwtDecode from 'jwt-decode';
 import AuthRoute from './util/AuthRoute';
-import ProtectedRoute from './util/ProtectedRoute';
+import ProtectedRoute from './util/ProtectedRoute'; 
 import {Provider} from 'react-redux';
 import {SET_AUTHENTICATED} from './redux/types';
 import {logout} from './redux/actions/userActions';
 import store from './redux/store';
 import axios from 'axios';
 import { getAllFactures } from './redux/actions/dataActions';
-import { AddProduct } from './components/AddProduct';
-import { AddCompany } from './components/AddCompany';
+
 
 const theme = createMuiTheme(themeFile);
 
@@ -33,43 +33,39 @@ if(token){
     window.location.href = '/login';
   }
   else{
-   
-    store.dispatch({type: SET_AUTHENTICATED});
-    
+    store.dispatch({type: SET_AUTHENTICATED});  
     axios.defaults.headers.common['Authorization'] = token;
     store.dispatch(getAllFactures());
   }
-
 }
+
 
 function App() {
   return (
-    <Provider store={store} >
       <MuiThemeProvider theme={theme}>
-      
-      <Router>
-      <Switch>
+       <Provider store={store} >
         <Grid container >
             <Grid item  sm={3} md={2}>
                 <Navbar />
             </Grid>
-              
-              <Grid item sm={9} md={10} styles className='content'>        
-                    <ProtectedRoute exact path='/' component={Home} />
-                    <ProtectedRoute  path='/products' component={AddProduct} />
-                    <ProtectedRoute  path='/companies' component={AddCompany}  />
-                    <ProtectedRoute exact path='/signup' component={Signup}  />   
+              <Grid item sm={9} md={10}  className='content'>        
+                    
+                    <ProtectedRoute  path='/' component={Home} />
+                    <ProtectedRoute  path='/products' component={Product}  />
+                    <ProtectedRoute  path='/companies' component={Company}  />
+                    <ProtectedRoute  path='/signup' component={Signup}  />
               </Grid>      
-                  <AuthRoute exact path='/login' component={Login}   />  
-              
           </Grid> 
-        </Switch>
-      </Router>
-   
+          <AuthRoute  path='/login' component={Login}   />
+
+          
+      </Provider>
+
     </MuiThemeProvider>
 
-    </Provider>
       );
 }
 
 export default App;
+
+

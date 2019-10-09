@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import {Link, withRouter} from 'react-router-dom';
 import {logout} from '../redux/actions/userActions';
 import logoWhite from '../images/logoWhite.svg';
 //Material UI
@@ -11,8 +10,6 @@ import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
 //Redux 
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
-
 
 
 const useStyles = makeStyles(theme => ({
@@ -47,14 +44,8 @@ const useStyles = makeStyles(theme => ({
       }
 }));
 
-
-
  function Navbar(props) {
   const classes = useStyles();
-/*<Button color='secondary' component={Link} to='/'>Factures</Button>
-                            <Button color='secondary' component={Link} to='/'>Proforma</Button>
-                            <Button color='secondary' component={Link} to='/'>Bordereau</Button>
-                            <Button color='secondary' component={Link} to='/signup'>Réglages</Button>*/
         
         let {user:{authenticated}} = props;
         return (
@@ -64,7 +55,7 @@ const useStyles = makeStyles(theme => ({
                     
                       <MenuTreeView />
                             
-                            <Button className={classes.buttonContained} variant='link' color='secondary' onClick={props.logout} component={Link} to='/login'>
+                            <Button className={classes.buttonContained} variant='link' color='secondary' onClick={props.logout} /*component={Link} to='/login'*/>
                               <SupervisedUserCircle className={classes.leftIcon} />
                               Déconnexion</Button>
                    
@@ -90,4 +81,4 @@ const mapActionToProps = {
   logout
 }
 
-export default withRouter(connect(mapPropsToState, mapActionToProps)(Navbar));
+export default connect(mapPropsToState, mapActionToProps)(Navbar);

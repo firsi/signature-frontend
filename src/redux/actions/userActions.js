@@ -1,5 +1,7 @@
 import { SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_AUTHENTICATED, SET_UNAUTHENTICATED} from '../types';
 import Axios from 'axios';
+import {navigate} from '@reach/router';
+
 import {getAllFactures} from './dataActions';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -8,7 +10,7 @@ export const loginUser = (userData, history) => (dispatch) => {
     
     Axios.post('/login', userData)
         .then(response => {
-            
+            console.log(response);
             dispatch({type: SET_AUTHENTICATED})
             const FBIdToken = `Bearer ${response.data.token}`;
             
@@ -20,7 +22,9 @@ export const loginUser = (userData, history) => (dispatch) => {
             dispatch(getAllFactures());
           
             dispatch({type: CLEAR_ERRORS});
-            history.push('/');
+            //useRedirect('/login', '/');
+            //history.push('/');
+            navigate('/');
         })
         .catch(error => {
           

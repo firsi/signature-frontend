@@ -13,20 +13,17 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SaveOutlined from '@material-ui/icons/SaveAltOutlined'
 import Snackbar from '@material-ui/core/Snackbar'
-
 //Redux
 import {connect} from 'react-redux';
 import {createCompany} from '../redux/actions/dataActions'; 
-import {withRouter} from 'react-router-dom';
+
 
 
 
 
 const styles = {
-    form: {
-       
+    form: { 
         flexGrow: 1,
-        
     },
 
     
@@ -46,9 +43,7 @@ const styles = {
     height: '2rem'
     },
     button: {
-     
       margin:'20px 0 20px 0px',
-      height: '55px',
       position: 'relative'
     },
     leftIcon: {
@@ -80,6 +75,7 @@ export class AddCompany extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        console.log(this.props)
         if(nextProps.ui.errors){
             console.log(nextProps.ui.errors)
             
@@ -139,6 +135,7 @@ export class AddCompany extends Component {
 
     render() {
         const {classes, ui : {loading} } = this.props;
+        console.log(this.props)
         const {errors} = this.state;
         
         
@@ -161,9 +158,10 @@ export class AddCompany extends Component {
                 <Grid item sm={12}>
                     
                     
-                    {this.props.isCalledFromAnotherPage ? '' : <Typography className = {classes.title} variant='h3' 
+                    {this.props.isCalledFromAnotherPage ? '' : <Typography className = {classes.title} variant='h5' 
                      >Ajouter Une Compagnie</Typography >}
                     <form noValidate onSubmit={this.handleSubmit} >
+
                         <TextField   id='company' type='text' name='company' label ='Compagnie' 
                         value={this.state.company} onChange={this.handleChange} 
                         helperText={errors.company}
@@ -182,9 +180,9 @@ export class AddCompany extends Component {
                         
                         
                        {this.props.isCalledFromAnotherPage ? '' : <Button type='submit' variant='contained' color='primary' 
-                         className={classes.button} disabled={loading} >
+                         className={classes.button} size='medium' disabled={loading} >
                            <SaveOutlined className={classes.leftIcon} />
-                            Enregistrer {loading && <CircularProgress size={30} className={classes.progress} color='secondary' />}
+                            Enregistrer {loading && <CircularProgress size={15} className={classes.progress} color='secondary' />}
                         </Button>}
                         <br />
                         
@@ -201,9 +199,7 @@ export class AddCompany extends Component {
 }
 
 AddCompany.propTypes = {
-    classes : PropTypes.object.isRequired,
-    
-   
+    classes : PropTypes.object.isRequired, 
     data : PropTypes.object.isRequired,
     ui : PropTypes.object.isRequired
 }
@@ -223,5 +219,5 @@ const mapStateToProps = (state) => ({
     return bindActionCreators({ createCompany, clearErrors, clearData }, dispatch)
   }
 
-export default withRouter(connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddCompany)));
+export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddCompany));
 

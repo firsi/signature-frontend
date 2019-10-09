@@ -21,10 +21,12 @@ export const getAllFactures = () => (dispatch) => {
     
     axios.get('/factures')
     .then(response => {
+        console.log(response)
         dispatch({type: CLEAR_ERRORS});
         dispatch({type: SET_FACTURES,
                   payload: response.data
         })
+       
     })
     .catch(error => console.log(error))
 

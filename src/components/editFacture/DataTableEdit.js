@@ -24,7 +24,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { AddCompany } from '../AddCompany';
 
@@ -39,14 +38,16 @@ const styles = {
         marginTop: '2%',
         flex:1,
         display: 'flex',
-        justifyContent: 'flex-end'     
+        justifyContent: 'flex-end',
+        alignItems:'center',
+            
     },
     company: {
         flex: 1,
         },
     button: {
         marginRight: '2%',
-        height:'40px',
+        height:'35px',
     },
     textField: {
         marginBottom:'20px',
@@ -213,7 +214,7 @@ class DataTableEdit extends Component {
 
        return (
         
-          <tr key={index}>
+          <tr key={index} className='row'>
              <td> <IconButton color='secondary' aria-label="supprimer" onClick={(event) => this.deleteRow(index, event)}>
                     <DeleteIcon />
                   </IconButton>   
@@ -292,17 +293,19 @@ class DataTableEdit extends Component {
                     <AddIcon />
                   </IconButton>   
                </div>
+
+               {/*Toolbox*/}
                <div className={classes.toolbox}>
-                    <Button variant='contained' className={classes.button} onClick={this.addRow}>
+                    <Button size='small' color='primary' variant='contained' className={classes.button} onClick={this.addRow}>
                         <ViewHeadlineIcon className={classes.leftIcon}/>
                         Ligne</Button>
 
-                    <Button variant='contained' className={classes.button} onClick={this.print} disabled={loading}>
+                    <Button size='small' color='primary' variant='contained' className={classes.button} onClick={this.print} disabled={loading}>
                         <PrintIcon className={classes.leftIcon}/>
                         Imprimer{loading && <CircularProgress size={20} className={classes.progress} color='secondary' />}</Button>
 
                    
-                    <Button variant='contained' className={classes.button} onClick={this.save} disabled={loading}>
+                    <Button size='small' color='primary' variant='contained' className={classes.button} onClick={this.save} disabled={loading}>
                         <SaveIcon className={classes.leftIcon} />
     Enregistrer {loading && <CircularProgress size={20} className={classes.progress} color='secondary' />}</Button>
                </div>

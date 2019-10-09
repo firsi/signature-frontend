@@ -1,20 +1,23 @@
 import React from 'react'
-import {Route, Redirect, withRouter} from 'react-router-dom';
+import {Router, navigate} from '@reach/router';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 
-const ProtectedRoute = ({component: Component, authenticated, ...rest}) => (
+
+
+const ProtectedRoute = ({component: Component, authenticated,...rest}) => {
+    if(!authenticated){
+        navigate('/login');
+        return null;
+    }
     
-    <Route 
-        {...rest} 
-        render = {(props) => 
-        authenticated === false ? <Redirect to='/login' /> : <Component {...props} />
-        
-        }
-        />
-        
-);
+    return (<Router > 
+         <Component  {...rest} />
+       
+    </Router>  )
+};
 
 
 ProtectedRoute.propTypes = {
@@ -27,4 +30,4 @@ const mapStateToProps = (state) => ({
     data: state.data,
     ui: state.ui
 });
-export default withRouter(connect(mapStateToProps)(ProtectedRoute));
+export default connect(mapStateToProps)(ProtectedRoute);

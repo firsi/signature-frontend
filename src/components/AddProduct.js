@@ -13,10 +13,11 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SaveOutlined from '@material-ui/icons/SaveAltOutlined'
 import Feedback from './Feedback';
+
 //Redux
 import {connect} from 'react-redux';
 import {createProduct} from '../redux/actions/dataActions'; 
-import { withRouter } from 'react-router-dom';
+
 
 
 
@@ -47,7 +48,7 @@ const styles = {
     button: {
      
       margin:'20px 0 20px 0px',
-      height: '55px',
+      //height: '55px',
       position: 'relative'
     },
     leftIcon: {
@@ -65,8 +66,8 @@ const styles = {
 };
 
 export class AddProduct extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
             product: '',
@@ -83,7 +84,9 @@ export class AddProduct extends Component {
             this.setState({errors: nextProps.ui.errors})
         }
     }
-   
+   componentWillMount() {
+       console.log(this.props);
+   }
 
     handleSubmit = (event) => {
         
@@ -107,9 +110,10 @@ export class AddProduct extends Component {
 
     render() {
         const {classes, ui : {loading}, data: {message} } = this.props;
+    
         const {errors} = this.state;
         
-
+        console.log(this.props.data);
         return (
             <Grid container className={classes.form}  >
                     
@@ -117,7 +121,7 @@ export class AddProduct extends Component {
                 <Grid item sm={12}>
                     
                     
-                    <Typography className = {classes.title} variant='h3' 
+                    <Typography className = {classes.title} variant='h5' 
                      >Ajouter Un Produit</Typography >
                     <form noValidate onSubmit={this.handleSubmit} >
                         <TextField  id='product' type='text' name='product' label ='Designation' 
@@ -140,9 +144,9 @@ export class AddProduct extends Component {
                         
                         
                         <Button type='submit' variant='contained' color='primary' 
-                         className={classes.button} disabled={loading} >
+                         className={classes.button} disabled={loading} size='medium'>
                            <SaveOutlined className={classes.leftIcon} />
-                            Enregistrer {loading && <CircularProgress size={30} className={classes.progress} color='secondary' />}
+                            Enregistrer {loading && <CircularProgress size={15} className={classes.progress} color='secondary' />}
                         </Button><br />
                         
   
@@ -178,5 +182,5 @@ const mapStateToProps = (state) => ({
     return bindActionCreators({ createProduct, clearErrors,clearData }, dispatch)
   }
 
-export default withRouter(connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddProduct)));
+export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(AddProduct));
 
