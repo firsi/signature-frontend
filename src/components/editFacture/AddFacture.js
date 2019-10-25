@@ -31,7 +31,7 @@ render (){
   return (
     <Paper className={classes.paper}>
         <DataTableEdit />
-    <Feedback />
+        <Feedback />
     </Paper>
   );}
 };

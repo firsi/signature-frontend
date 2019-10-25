@@ -25,52 +25,45 @@ const styles = {
 
         this.state = {
             companies: [],
-    
             companyName:''
         }
     }
     
+    handleChange = (event) => {
+    this.setState({ 
+        [event.target.name] : event.target.value
+    })
+    this.props.setCompany(event.target.value);
+    }
 
-      handleChange = (event) => {
-        this.setState({ 
-            [event.target.name] : event.target.value
-        })
-        this.props.setCompany(event.target.value);
-      }
+    componentWillMount(){
+        this.props.getAllCompanies();
 
-      componentWillMount(){
-          this.props.getAllCompanies();
+    }
 
-      }
     componentWillReceiveProps(nextProps){
         if(nextProps.data.companies){
-           // console.log(nextProps.ui.errors)
             this.setState({companies: nextProps.data.companies})
         }
-       
     }
 
     render() {
         const {classes} = this.props;
         return (
             <Select
-          className={classes.selection}
-          value={this.state.companyName}
-          onChange={this.handleChange}
-          input={<Input name="companyName" id="name-readonly"  />}
-          displayEmpty
+            className={classes.selection}
+            value={this.state.companyName}
+            onChange={this.handleChange}
+            input={<Input name="companyName" id="name-readonly"  />}
+            displayEmpty >
+                <MenuItem value="" disabled> Compagnie </MenuItem>
 
-          
-        >
-          <MenuItem value="" disabled>
-            Compagnie
-          </MenuItem>
-            {this.state.companies.map((company, index) => {
-               return <MenuItem key={`MenuItem ${index}`} value={company.companyName}>{company.companyName}</MenuItem>
-            })}
-          
-          
-        </Select>
+                {this.state.companies.map((company, index) => {
+                    return <MenuItem key={`MenuItem ${index}`} value={company.companyName}>
+                                {company.companyName}
+                            </MenuItem>
+                })}   
+            </Select>
         )
     }
 }

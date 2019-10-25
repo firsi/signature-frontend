@@ -23,12 +23,6 @@ const styles = {
     constructor(props){
       super(props);
       this.InvoiceModalElement = React.createRef();
-
-      this.state = {
-        description: '',
-        bestCustomerCompany:'',
-      }
-      
     }
 
     print = (id) => {
@@ -82,8 +76,7 @@ const styles = {
             { title: 'Titre', field: 'title' },
             { title: 'Montant', field: 'totalPrice' },
             { title: 'Créée le', field: 'createdAt', type: 'date' },
-            
-           
+          
           ]}
 
           options= {{headerStyle: {

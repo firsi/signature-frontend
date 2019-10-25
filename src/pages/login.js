@@ -18,8 +18,7 @@ import {loginUser} from '../redux/actions/userActions';
 const styles = {
     form: {
         textAlign: 'center',
-        height: '100vh',
-        
+        height: '100vh',  
     },
     formContainer: {
         paddingLeft: '3%',
@@ -75,7 +74,6 @@ class Login extends Component {
 
     componentWillReceiveProps(nextProps){
         if(nextProps.ui.errors){
-            console.log(nextProps.ui.errors)
             this.setState({errors: nextProps.ui.errors})
         }
     }
@@ -87,7 +85,6 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password
         };
-        console.log('submit');
         this.props.loginUser(userData, this.props.history);
     }
 
@@ -106,6 +103,7 @@ class Login extends Component {
                 <Grid item sm={8} md={5} xs={12} className={classes.formContainer}>
                     <img src={logo} className={classes.logo} alt='Signature logo' />
                     <Typography className = {classes.title} variant='h5' >Connectez vous pour commencer</Typography >
+
                     <form noValidate onSubmit={this.handleSubmit} >
                         <TextField variant='outlined' id='email' type='email' name='email' label ='Email' 
                         value={this.state.email} onChange={this.handleChange} 
@@ -113,11 +111,13 @@ class Login extends Component {
                         error = {errors.email ? true : false}
                         className={classes.textField} fullWidth margin='normal' />
 
-                        <TextField variant='outlined' id='password' type='password' name='password' label ='Mot de passe' placeholder='Mot de passe'
+                        <TextField variant='outlined' id='password' type='password' 
+                        name='password' label ='Mot de passe' placeholder='Mot de passe'
                         value={this.state.password} onChange={this.handleChange} 
                         helperText={errors.password}
                         error = {errors.password ? true : false}
                         className={classes.textField} margin='normal' fullWidth />
+                        
                         {(errors.general) &&
                             <Typography variant='body2' className={classes.customError}>
                                 {errors.general}
@@ -130,11 +130,8 @@ class Login extends Component {
                         </Button><br />
 
                         {errors.general && <small>Avez-vous oublié votre mot de passe ?</small>}
-                    </form>
-                   
+                    </form>    
                 </Grid>
-               
-
             </Grid>
         )
     }
@@ -143,13 +140,11 @@ class Login extends Component {
 Login.propTypes = {
     classes : PropTypes.object.isRequired,
     loginUser : PropTypes.func.isRequired,
-   
     data : PropTypes.object.isRequired,
     ui : PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-   
     ui : state.ui,
     data : state.data
 })

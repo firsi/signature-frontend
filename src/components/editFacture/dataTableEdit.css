@@ -58,6 +58,7 @@
  }
  td input:focus{
     outline: none;
+    
 }
  td select{
     width: 100%;

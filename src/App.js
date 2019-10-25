@@ -22,7 +22,6 @@ import { getAllFactures } from './redux/actions/dataActions';
 
 
 const theme = createMuiTheme(themeFile);
-
 const token = localStorage.FBIdToken;
 
 if(token){
@@ -42,25 +41,23 @@ if(token){
 
 function App() {
   return (
-      <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
        <Provider store={store} >
         <Grid container >
             <Grid item  sm={3} md={2}>
                 <Navbar />
             </Grid>
-              <Grid item sm={9} md={10}  className='content'>        
-                    
-                    <ProtectedRoute  path='/' component={Home} />
-                    <ProtectedRoute  path='/products' component={Product}  />
-                    <ProtectedRoute  path='/companies' component={Company}  />
-                    <ProtectedRoute  path='/signup' component={Signup}  />
-              </Grid>      
-          </Grid> 
-          <AuthRoute  path='/login' component={Login}   />
 
-          
+            <Grid item sm={9} md={10}  className='content'>        
+                  <ProtectedRoute  path='/' component={Home} />
+                  <ProtectedRoute  path='/products' component={Product}  />
+                  <ProtectedRoute  path='/companies' component={Company}  />
+                  <ProtectedRoute  path='/signup' component={Signup}  />
+            </Grid>      
+        </Grid> 
+        
+        <AuthRoute  path='/login' component={Login}   />  
       </Provider>
-
     </MuiThemeProvider>
 
       );

@@ -1,3 +1,20 @@
+   const companiesFactureTotal = (invoices) => {
+        let companies = [];
+        invoices.map(facture => {
+            // check if we've already compute this company invoices
+            if(!companies.find(name => name === facture.companyName)){
+            //compute a single company total
+            let singleCompanyMontantTotal =  invoices.filter(current => facture.companyName === current.companyName)
+                                .reduce((accumulator, fact) => accumulator+fact.totalPrice,0); 
+              
+            companies.push({company: facture.companyName ,
+                              total: singleCompanyMontantTotal});
+            }
+        });
+        return companies;
+
+    }
+
 
    //Format the invoice data to be sent for printing
    exports.formatFacture = ({title, totalPrice, companyName, commandes}) => {
@@ -42,19 +59,7 @@
         });
 
 
-        let companies = [];
-        presentMonthFactures.map(facture => {
-            // check if we've already compute this company invoices
-            if(!companies.find(name => name === facture.companyName)){
-            //compute a single company total
-            let singleCompanyMontantTotal =  presentMonthFactures.filter(current => facture.companyName === current.companyName)
-                                .reduce((accumulator, fact) => accumulator+fact.totalPrice,0); 
-              
-            companies.push({company: facture.companyName ,
-                              total: singleCompanyMontantTotal});
-            }
-        });
-
+        const companies = companiesFactureTotal(presentMonthFactures);
 
         //compare total
         let bestCustomer = {company:'', total:0}
@@ -66,5 +71,13 @@
      }
   
 
+     exports.customersIncomeThisYear = (invoices) => {
+         
+        const factures = invoices;
+        //Get Invoices of this month
+        const presentYearFactures = factures.filter(current => new Date(current.createdAt).getFullYear() === new Date().getFullYear());
 
+        return companiesFactureTotal(presentYearFactures);  
+        
+     } 
 

@@ -21,11 +21,8 @@ import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { AddCompany } from '../AddCompany';
+import  AddCompany  from '../AddCompany';
+import SimpleModal from '../SimpleModal';
 
 
 const styles = {
@@ -62,13 +59,14 @@ const styles = {
         
         }
 }
+
 class DataTableEdit extends Component {
    constructor(props) {
-      super(props) 
+      super(props) ;
+      this.addCompanyRef = React.createRef();
+
       this.state = { 
-         facture: [
-            {  product: 'House', qty: 1, defaultPrice: 5000, montant: 5000 },
-         ],
+         facture: [{ product: 'House', qty: 1, defaultPrice: 5000, montant: 5000 }],
          total:0,
          companyName:'',
          facttitle:'',
@@ -76,71 +74,52 @@ class DataTableEdit extends Component {
       }
    }
 
-   componentWillMount(){
+   componentDidMount(){
     this.props.getAllProducts();
    }
-
-   componentWillReceiveProps(nextProps){
-    if(!nextProps.ui.errors){
-        this.closeDialog();
-        
-    }
-}
    
-   handleChange = (index,event) => {
-        const rows = this.state.facture;
+   handleChange = (index,event) => { 
         let total = 0;
-
-        
-      //when its a product, update the price field
-      if(event.target.name === 'product'){
-
-          const products = this.props.data.products;
-          let selectedIndex = event.target.selectedIndex;
-
-          rows[index].defaultPrice  = products[selectedIndex].defaultPrice;
-          rows[index][event.target.name] = event.target.value;
-          rows[index].montant = rows[index].qty * rows[index].defaultPrice;
-          total = this.totalComputing();
-
-      }else if (event.target.name === 'defaultPrice' || event.target.name ==='qty'){
-          if(/\s*-\s*/.test(event.target.value)){
-              console.log('dedans')
-              return;
-          }
-        rows[index][event.target.name] = event.target.value;
-        rows[index].montant = rows[index].qty * rows[index].defaultPrice;
-
-         total = this.totalComputing();
-       
-      }
-      this.setState({facture: rows,
-                    total: total ,                                      
-                    });
-
-                    
-   }
-   titleChange = (event) => {
-   
-        this.setState({ 
-            [event.target.name] : event.target.value
-        })
-     
-   }
-   totalComputing = () => {
         const rows = this.state.facture;
-       return rows.reduce((accumulator, item) => {return accumulator + item.montant},0);
+     
+      if(event.target.name === 'product'){
+          rows[index][event.target.name] = event.target.value;
+          this.setPriceField(index, event);
+          this.setMontantField(index);
+          total = this.computeTotal();
+      }
+      else if (event.target.name === 'defaultPrice' || event.target.name ==='qty'){ 
+          rows[index][event.target.name] = event.target.value; 
+          this.setMontantField(index);
+          total = this.computeTotal();
+      }
+
+      this.setState({facture: rows, total: total});           
    }
-   validation = (event) => {
-       
-        if(event.keyCode === 107 || event.keyCode === 107 || event.target.value <= 0){
-            event.preventDefault();
-            return;
-        }
+
+   setPriceField( index, event){
+    const rows = this.state.facture;
+    const products = this.props.data.products;
+    const selectedIndex = event.target.selectedIndex;
+
+    rows[index].defaultPrice  = products[selectedIndex].defaultPrice;
    }
-   
+
+   setMontantField( index){
+        const rows = this.state.facture;
+        rows[index].montant = rows[index].qty * rows[index].defaultPrice;
+   }
+
+   computeTotal = () => {
+        const rows = this.state.facture;
+        return rows.reduce((accumulator, item) => {return accumulator + item.montant},0);
+    }
+
+   handleFactureTitle = (event) => {
+        this.setState({[event.target.name] : event.target.value});
+   }
+
    save = () => {
-       
        const factureData = {
            title: this.state.facttitle,
            companyName: this.props.data.companyName,
@@ -148,7 +127,6 @@ class DataTableEdit extends Component {
            commandes: this.state.facture
        }
 
-       
        this.props.postFacture(factureData);
    }
 
@@ -161,170 +139,149 @@ class DataTableEdit extends Component {
          companyName: this.props.data.companyName
     }
     const factureData = formatFacture(data);
+
     this.props.generatePdf(factureData);
    }
-   addCompany = () => {
-    this.setState({
-        open: true
-      })
-    }
-  
-   closeDialog = () => {
-      this.setState({open: false})
-    }
-
-    saveCompany = (event) => {
-      
-            this.child.handleSubmit(event);
-            
-            while(this.props.ui.loading){
-
-            }
-
-            if(this.props.data.errors === {}){
-                this.closeDialog();
-            }  
-
-     }  
-
      
    addRow = () => {
         const rows = this.state.facture;
         rows.push( { product: 'House', qty: 1, defaultPrice: 1, montant: 1 });
         this.setState({facture: rows});
    }
-   deleteRow = (index, event) => {
+
+   deleteRow = (index) => {
     const rows = this.state.facture;
     rows.splice(index,1);
-    const total = this.totalComputing();
-      this.setState({facture: rows,
+    const total = this.computeTotal();
+    this.setState({facture: rows,
                      total: total
-                    });
+                  });
    }
+
+   addCompany = () => {
+    this.addCompanyRef.current.handleOpen();
+   }
+
+   renderAddProduct(classes){
+    return (
+            <div className={classes.company} >
+                <SimpleModal ref={this.addCompanyRef} component={AddCompany} />
+                <Selection />
+
+                <IconButton color='secondary' aria-label="supprimer" onClick={this.addCompany}>
+                    <AddIcon />
+                </IconButton>   
+            </div>
+    );
+   }
+
+   renderToolbox(classes, loading){
+       return(
+                <div className={classes.toolbox}>
+                    <Button size='small' color='primary' variant='contained' 
+                    className={classes.button} onClick={this.addRow}>
+                        <ViewHeadlineIcon className={classes.leftIcon}/>Ligne
+                    </Button>
+
+                    <Button size='small' color='primary' variant='contained' 
+                    className={classes.button} onClick={this.print} disabled={loading}>
+                        <PrintIcon className={classes.leftIcon}/>
+                        Imprimer{loading && 
+                                <CircularProgress size={20} className={classes.progress} color='secondary' />}
+                    </Button>
+
+                    <Button size='small' color='primary' variant='contained' 
+                    className={classes.button} onClick={this.save} disabled={loading}>
+                        <SaveIcon className={classes.leftIcon} />
+                        Enregistrer {loading && 
+                                    <CircularProgress size={20} className={classes.progress} color='secondary' />}
+                    </Button>
+                </div>
+       )
+   }
+
    renderTableData() {
     let products = this.props.data.products; 
-    const rows  = this.state.facture;
-    
-    return this.state.facture.map((row, index) => {
-        
-       let { id, product, qty, defaultPrice, montant } = row //destructuring
-      
+
+    return this.state.facture.map((row, index) => {  
+      let {montant} = row 
       const formattedMontant = montant.toLocaleString('fr-FR', { style: 'currency', currency: 'XOF' });
-      
 
        return (
         
           <tr key={index} className='row'>
-             <td> <IconButton color='secondary' aria-label="supprimer" onClick={(event) => this.deleteRow(index, event)}>
+             <td> 
+                <IconButton color='secondary' aria-label="supprimer" 
+                    onClick={(event) => this.deleteRow(index, event)}>
                     <DeleteIcon />
-                  </IconButton>   
+                </IconButton>   
             </td>
-             <td><select name='product' value={this.state.facture[index].product} 
-                    onChange={(event) => this.handleChange(index, event)} >
-                        {products.map((item, index) => <option value={item.product}>{item.product}</option>)}
+
+             <td>
+                <select name='product' value={this.state.facture[index].product} 
+                onChange={(event) => this.handleChange(index, event)} >
+                        {products.map((item) => <option value={item.product}>{item.product}</option>)}
                 </select>
             </td>
 
-             <td><input type='number'name='qty' value={this.state.facture[index].qty} 
-                    onChange={(event) => this.handleChange(index, event)}
-                    min={1}
-                    /></td>
+            <td>
+                 <input type='number'name='qty' value={this.state.facture[index].qty} 
+                    onChange={(event) => this.handleChange(index, event)} min={1}
+                    />
+            </td>
 
-             <td><input type='number'name='defaultPrice' value={this.state.facture[index].defaultPrice}
-                    onChange={(event) => this.handleChange(index, event)}
-                    min={1}
-                    /></td>
-                    {}
-             <td onClick={this.totalComputing}>{formattedMontant}</td>
+            <td>
+                 <input type='number'name='defaultPrice' value={this.state.facture[index].defaultPrice}
+                    onChange={(event) => this.handleChange(index, event)} min={1}/>
+            </td>
+                    
+             <td onClick={this.computeTotal}> {formattedMontant} </td>
           </tr>
-          
-        
        )
     })
  }
 
- 
-
- renderTableHeader() {
-    
+ renderTableHeader() { 
     return (<tr>
-        <th >Actions</th>
-        <th >Designation</th>
-        <th >Quantité</th>
-        <th >Prix</th>
-        <th >Montant</th>
-       </tr>
+                <th >Actions</th>
+                <th >Designation</th>
+                <th >Quantité</th>
+                <th >Prix</th>
+                <th >Montant</th>
+            </tr>
       )
-   
  }
 
-
- render() {
-
+    render() {
         let {classes, ui : {loading}} = this.props;
-    return (
-       <div>
-           
-           <Dialog open={this.state.open} onClose={this.closeDialog} aria-labelledby="form-dialog-title">
-           
-           <DialogTitle >Ajouter Une Compagnie</DialogTitle>
-                <DialogContent>
-                   <AddCompany ref={Ref => this.child=Ref } isCalledFromAnotherPage ={true} {...this.props}/>
+
+        return (
+            <div>
+                <div>
+                    <TextField  id='facttitle' type='text' name='facttitle' label ="Titre de la facture" 
+                    value={this.state.title} onChange={this.handleFactureTitle} 
+                    className={classes.textField}  />
+                </div>
+
+                <div className={classes.root}>
+                    {this.renderAddProduct(classes)}
+                    {this.renderToolbox(classes, loading)}
+                </div>
                 
-                </DialogContent>
-                <DialogActions>
-                <Button onClick={this.closeDialog} color="primary">
-                    Annuler
-                </Button>
-                <Button onClick={this.saveCompany} disabled={loading} color="primary">
-                    Ajouter {loading && <CircularProgress size={20} className={classes.progress} color='secondary' />}
-                </Button>
-                </DialogActions>
-            </Dialog>
-           <div>
-            <TextField  id='facttitle' type='text' name='facttitle' label ="Titre de la facture" 
-                            value={this.state.title} onChange={this.titleChange} 
-                            className={classes.textField}  />
+                <table id='facture'>
+                    {this.renderTableHeader()}
+                    <tbody>
+                        {this.renderTableData()}
+                        <tr>
+                            <th id="total" colSpan={4}>Montant HT :</th>
+                            <td id='total-value'>
+                                {this.state.total.toLocaleString('fr-FR', { style: 'currency', currency: 'XOF' })}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-           <div className={classes.root}>
-               <div className={classes.company} >
-                 <Selection />
-                 <IconButton color='secondary' aria-label="supprimer" onClick={this.addCompany}>
-                    <AddIcon />
-                  </IconButton>   
-               </div>
-
-               {/*Toolbox*/}
-               <div className={classes.toolbox}>
-                    <Button size='small' color='primary' variant='contained' className={classes.button} onClick={this.addRow}>
-                        <ViewHeadlineIcon className={classes.leftIcon}/>
-                        Ligne</Button>
-
-                    <Button size='small' color='primary' variant='contained' className={classes.button} onClick={this.print} disabled={loading}>
-                        <PrintIcon className={classes.leftIcon}/>
-                        Imprimer{loading && <CircularProgress size={20} className={classes.progress} color='secondary' />}</Button>
-
-                   
-                    <Button size='small' color='primary' variant='contained' className={classes.button} onClick={this.save} disabled={loading}>
-                        <SaveIcon className={classes.leftIcon} />
-    Enregistrer {loading && <CircularProgress size={20} className={classes.progress} color='secondary' />}</Button>
-               </div>
-            
-            
-           </div>
-           
-          <table id='facture'>
-              {this.renderTableHeader()}
-             <tbody>
-                {this.renderTableData()}
-                <tr>
-                    <th id="total" colSpan={4}>Montant HT :</th>
-                    <td id='total-value'>{this.state.total.toLocaleString('fr-FR', { style: 'currency', currency: 'XOF' })}</td>
-                </tr>
-             </tbody>
-          </table>
-       </div>
-    )
+        )
  }
 }
 const clearErrors = () => ({ type: CLEAR_ERRORS });

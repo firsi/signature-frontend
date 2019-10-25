@@ -23,33 +23,22 @@ import {createProduct} from '../redux/actions/dataActions';
 
 
 const styles = {
-    form: {
-       
-        flexGrow: 1,
-        
-    },
-
     
     title: {
         fontWeight: '700',
         marginBottom: '10px'
     },
-    textField: {
-    margin: '20px 15px 20px 15px',
     
-    },
-    description: {
-        width:'40%'
-    },
     
     input: {
     height: '2rem'
     },
     button: {
-     
-      margin:'20px 0 20px 0px',
-      //height: '55px',
-      position: 'relative'
+      
+      position: 'relative',
+      margin: '5% auto 0 auto',
+      display: 'block',
+      minWidth: '180px'
     },
     leftIcon: {
         marginRight:'10%',
@@ -128,19 +117,19 @@ export class AddProduct extends Component {
                         value={this.state.product} onChange={this.handleChange} 
                         helperText={errors.product}
                         error = {errors.product ? true : false}
-                        className={classes.textField}  />
+                        className={classes.textField} fullWidth />
 
                         <TextField  id='defaultPrice' type='number' name='defaultPrice' label ='Prix' 
                         value={this.state.defaultPrice} onChange={this.handleChange} 
                         helperText={errors.defaultPrice}
                         error = {errors.defaultPrice ? true : false}
-                        className={`${classes.textField} ${classes.prix}`}  />
+                        className={`${classes.textField} ${classes.prix}`}  fullWidth/>
 
                         <TextField  id='description' type='text'  name='description' label ='Description' 
                         value={this.state.description} onChange={this.handleChange} 
                         helperText={errors.description}
                         error = {errors.description ? true : false}
-                        className={`${classes.textField} ${classes.description}`}  />
+                        className={`${classes.textField} ${classes.description}`} fullWidth />
                         
                         
                         <Button type='submit' variant='contained' color='primary' 
